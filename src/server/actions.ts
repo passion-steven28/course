@@ -16,23 +16,19 @@ export async function createUser(formData: FormData) {
     if (!email || !password) {
         return { success: false, message: 'Please fill in all fields.' };
     }
-    try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-        console.log(user);
-        redirect('/')
-        return { success: true, message: 'User created successfully!' };
 
-    } catch (error: any) {
-        // Handle specific errors
-        if (error.code === 'auth/email-already-in-use') {
-            return { success: false, message: 'Email address is already in use.' };
-        } else if (error.code === 'auth/weak-password') {
-            return { success: false, message: 'Password is too weak.' };
-        } else {
-            return { success: false, message: 'An error occurred. Please try again later.' };
-        }
+    try {
+        const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+        const user = userCredential.user;
+        console.log('User created:', user);
+    } catch (error) {
+        console.error('Error creating user:', error);
     }
+    redirect('/sign-in')
 }
 
 export async function signInUser(formData: FormData) {
@@ -43,11 +39,15 @@ export async function signInUser(formData: FormData) {
         return { success: false, message: 'Please fill in all fields.' };
     }
 
-    await signInWithEmailAndPassword(
-        auth,
-        email as string,
-        password as string
-    );
+    try {
+        const userCredential = signInWithEmailAndPassword(
+            auth,
+            email as string,
+            password as string
+        );
+    } catch (error) {
+        console.error('Error signing in user:', error);
+    }
 
     redirect('/')
 }

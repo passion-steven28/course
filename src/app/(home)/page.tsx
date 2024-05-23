@@ -1,7 +1,8 @@
+import HeroSection from "@/components/HeroSection";
 import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/db/firebase";
 import { signOutUser } from "@/server/actions";
-import { redirect } from "next/navigation";
+
 
 export default async function Home() {
   const user = await auth.currentUser;
@@ -13,12 +14,13 @@ export default async function Home() {
 
 
   return (
-    <main>
-      <h1>Hello World</h1>
-      {/* {user.email} */}
-      <form action={signOutUser}>
-      <Button type="submit">sign out</Button>
-      </form>
+    <main className="grid grid-cols-12 min-h-screen">
+      <section className="col-start-3 col-end-11 max-h-screen">
+        <HeroSection />
+      </section>
+      {/* <form onSubmit={signOutUser}>
+        <Button type="submit">sign out</Button>
+      </form> */}
     </main>
   );
 }
